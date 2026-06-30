@@ -1,0 +1,52 @@
+corpus:
+  # Corpus path is resolved relative to this skill directory unless absolute.
+  path: corpus
+  file_glob: "*.pdf"
+  filename_pattern: "{YYYYMMDD}_{Broker}_{hash}.pdf"
+  include_reports_in_repository: false
+
+helpers:
+  python:
+    # The skill expects its dependency environment to be bundled with the skill.
+    # Resolve these paths relative to the skill directory.
+    windows: ".venv\\Scripts\\python.exe"
+    unix: ".venv/bin/python"
+  locator:
+    path: scripts/find_pdf.py
+    required_args:
+      - corpus
+      - ticker
+      - date
+      - broker
+    example: ".venv\\Scripts\\python.exe scripts\\find_pdf.py --corpus corpus --ticker \"SHA0 GY\" --date 20260622 --broker \"Kepler Cheuvreux\""
+  extractor:
+    path: scripts/extract_pdf_data.py
+    defaults:
+      top_pages: 5
+      lead_pages: 3
+    required_args:
+      - file
+    example: ".venv\\Scripts\\python.exe scripts\\extract_pdf_data.py --file \"corpus/20260622_Kepler Cheuvreux_098dda895ab76d9a8e9b4c3a3408485a.pdf\" --top-pages 5 --lead-pages 3"
+  highlighter:
+    path: scripts/highlight_pdf.py
+    temp_dir_name: find-rpt-highlights
+    rendering: burned_in_rectangles
+    matching:
+      - exact_search
+      - normalized_word_fallback
+    required_args:
+      - source
+      - quote
+    optional_args:
+      - page
+      - highlighted-pdf
+      - output
+    example: ".venv\\Scripts\\python.exe scripts\\highlight_pdf.py --source \"corpus/20260622_Kepler Cheuvreux_098dda895ab76d9a8e9b4c3a3408485a.pdf\" --page 1 --quote \"better margins\""
+
+output:
+  template: template.md
+  target_words_excluding_table_and_source: "120-180"
+  max_tables: 1
+  require_inline_citations: true
+  require_highlighted_pdf_links: true
+  require_exact_local_paths: true
