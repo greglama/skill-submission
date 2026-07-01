@@ -47,3 +47,13 @@ find-rpt FBK.MI 2026-05-11 Goldman
 ```
 
 The skill will locate the report, highlight the cited quotes in a temp PDF copy, and return the brief.
+
+## Architecture
+
+Three scripts try to keep the skill deterministic and token efficient:  
+- `find_pdf.py` locates the report,  
+- `extract_pdf_data.py` pulls only the most relevant PDF pages to stay token efficient,  
+- `highlight_pdf.py` highlights citation into a PDF copy in system Temp. Clicking a citation opens that highlighted PDF inside Codex. This highlighted version is a copy and the corpus is never touched.  
+
+To guide the AI in building the skill I asked it to start from a scaffolding I put together.  
+I coded the first script and only wrote a skeleton for the 2nd. While the AI wrote the highlight completly on its own.  
