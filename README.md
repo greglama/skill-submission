@@ -55,5 +55,10 @@ Three scripts try to keep the skill deterministic and token efficient:
 - `extract_pdf_data.py` pulls only the most relevant PDF pages to stay token efficient,  
 - `highlight_pdf.py` highlights citation into a PDF copy in system Temp. Clicking a citation opens that highlighted PDF inside Codex. This highlighted version is a copy and the corpus is never touched.  
 
+3 designs choices:
+- Convert the PDF pages to Markdown to ease the LLM reading 
+- Output JSON format from all the python scripts (known to be well structured for LLM)
+- `extract_pdf_data.py` extracts the tables from the pdf in a separate object alongside the text in JSON output. The LLM sees the table twice, once in the text in markdown, and a 2nd time in a json format. This limits number hallucination and bad understanding due to formatting.   
+
 To guide the AI in building the skill I asked it to start from a scaffolding I put together.  
 I coded the first script and only wrote a skeleton for the 2nd. While the AI wrote the highlight completly on its own.  
